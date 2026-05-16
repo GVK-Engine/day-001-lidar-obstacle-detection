@@ -1,8 +1,7 @@
-# Day 1 — LiDAR Obstacle Detection Pipeline
+# Day 1 - LiDAR Obstacle Detection Pipeline
 
-**Series 1: Perception | Project 1 of 12**
+**Series 1: Perception**
 
-Part of my 90-day robotics portfolio series.
 MS Robotics and Autonomous Systems Engineering, Arizona State University, Dec 2026.
 
 ---
@@ -10,13 +9,13 @@ MS Robotics and Autonomous Systems Engineering, Arizona State University, Dec 20
 ## The Problem
 
 A LiDAR sensor fires 100,000 laser beams per second.
-What comes back is 100,000 floating dots in 3D space — no labels, no object names, just coordinates.
+What comes back is 100,000 floating dots in 3D space - no labels, no object names, just coordinates.
 
 A self-driving car looking at raw LiDAR data cannot detect anything.
 It cannot brake for a pedestrian it does not know exists.
 It cannot steer around a car it cannot identify.
 
-This pipeline solves that. It takes raw, unstructured point cloud data and outputs a list of detected 3D obstacles with their positions, sizes, and distances — in real time.
+This pipeline solves that. It takes raw, unstructured point cloud data and outputs a list of detected 3D obstacles with their positions, sizes, and distances - in real time.
 
 ---
 
@@ -24,7 +23,7 @@ This pipeline solves that. It takes raw, unstructured point cloud data and outpu
 
 Companies use PCL (Point Cloud Library) as a starting foundation.
 PCL provides raw geometric tools, not complete detection solutions.
-Every AV company — Waymo, Cruise, Aurora — builds their own pipeline on top of these primitives.
+Every AV company - Waymo, Cruise, Aurora - builds their own pipeline on top of these primitives.
 That is exactly what this project implements, from raw binary file to labeled 3D bounding boxes.
 
 ---
@@ -55,7 +54,7 @@ Open3D Visualization    interactive 3D viewer
 
 ---
 
-## My Contribution — Voxel Size Trade-off Analysis
+## My Contribution - Voxel Size Trade-off Analysis
 
 Most implementations pick a voxel size and never question it.
 I tested three configurations across 10 frames and made a data-driven decision.
@@ -63,8 +62,8 @@ I tested three configurations across 10 frames and made a data-driven decision.
 | Voxel Size | Avg Runtime | Avg Clusters | Verdict |
 |------------|-------------|--------------|---------|
 | 0.1m       | 9.2ms       | 5.0          | Minimal speed gain over 0.2m, not worth the extra density |
-| **0.2m**   | **8.3ms**   | **4.9**      | **Optimal — best balance of speed and accuracy** |
-| 0.4m       | 6.7ms       | 8.5          | Creates false detections — dangerous for AV systems |
+| **0.2m**   | **8.3ms**   | **4.9**      | **Optimal - best balance of speed and accuracy** |
+| 0.4m       | 6.7ms       | 8.5          | Creates false detections - dangerous for AV systems |
 
 The 0.4m setting finds 8.5 clusters when only 3-4 real objects exist.
 Those extra detections are ghost objects that do not exist on the road.
@@ -96,7 +95,7 @@ https://drive.google.com/file/d/1c_QR9fI8jygRXkXXYF_KOKMvno3ocpen/view?usp=drive
 
 ---
 
-### Real KITTI Data — 2011_09_26_drive_0001, Frame 1
+### Real KITTI Data - 2011_09_26_drive_0001, Frame 1
 
 Data recorded from a Velodyne HDL-64E LiDAR mounted on a car
 driving in Karlsruhe, Germany, 2011.
@@ -143,12 +142,12 @@ Set it too small and bumpy road surfaces leave ground points in the object cloud
 Set it too large and low vehicles get removed as ground.
 Tuning requires examining actual failure cases, not just the nominal result.
 
-DBSCAN eps must be tuned alongside voxel size — they are not independent parameters.
+DBSCAN eps must be tuned alongside voxel size - they are not independent parameters.
 At voxel=0.4m, the point spacing changes enough that eps=0.6m starts merging adjacent cars.
 Both parameters must be chosen together.
 
 The voxel size trade-off is a real engineering decision with safety consequences.
-This is not a tuning preference — the wrong choice creates ghost detections.
+This is not a tuning preference - the wrong choice creates ghost detections.
 
 ---
 
