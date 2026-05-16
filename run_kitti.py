@@ -1,10 +1,3 @@
-"""
-run_kitti.py
-============
-Run our LiDAR pipeline on REAL KITTI data.
-This is the moment our project becomes real.
-"""
-
 import numpy as np
 import open3d as o3d
 import time
