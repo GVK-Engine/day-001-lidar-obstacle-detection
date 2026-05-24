@@ -1,6 +1,6 @@
 # Day 1 - LiDAR Obstacle Detection Pipeline
 
-**Portfolio Series 1: Perception**
+**#Portfolio Series 1: Perception**
 
 MS Robotics and Autonomous Systems Engineering, Arizona State University, Dec 2026.
 
